@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../expo-app/.git"
+		},
+		{
+			"path": "../expo-app"
+		}
+	],
+	"settings": {}
+}
