@@ -1,6 +1,7 @@
 export enum IReactNativeAction {
  OpenBottomDrawer = "OpenBottomDrawer",
  InvokeHaptic = "InvokeHaptic",
+ Log = "Log",
 }
 
 export enum ReactNativeHapticEvent {

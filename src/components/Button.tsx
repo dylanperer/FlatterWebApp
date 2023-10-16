@@ -17,7 +17,11 @@ export const Button: Component<IButton> = ({
   const handleClick = async () => {
     if (!isLoading()) {
       setIsLoading(true);
-      await onClick();
+      try{
+        await onClick();
+      }catch {
+        setIsLoading(false);
+      }
       setIsLoading(false);
     }
   };

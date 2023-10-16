@@ -13,6 +13,9 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    proxy: {
+      '/api': 'https://localhost:44331'
+    }
   },
   build: {
     target: 'esnext',

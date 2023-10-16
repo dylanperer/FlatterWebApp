@@ -23,3 +23,7 @@ export const OpenBottomDrawer = (route: string) => {
 export const InvokeHaptic = (haptic: ReactNativeHapticEvent) => {
  postMessage([{ action: IReactNativeAction.InvokeHaptic, message: haptic }]);
 };
+
+export const ReactNativeConsoleLog = (msg: string) => {
+ postMessage([{ action: IReactNativeAction.Log, message: msg }]);
+};

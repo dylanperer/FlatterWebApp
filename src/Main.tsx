@@ -22,7 +22,9 @@ const Main: Component = () => {
       path={AppRoutes.SignUp}
       component={() => (
        <Suspense fallback={<Preloader />}>
-        <SignUp />
+        {/*<SignUp />*/}
+           <SignIn />
+
        </Suspense>
       )}
      />
