@@ -18,7 +18,7 @@ export class AuthenticationClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    signUp(request: SignUpRequest | undefined): Promise<FileResponse | null> {
+    signUp(request: SignUpRequest | undefined): Promise<AuthenticationResponse> {
         let url_ = this.baseUrl + "/Authentication/SignUp";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -38,26 +38,25 @@ export class AuthenticationClient {
         });
     }
 
-    protected processSignUp(response: Response): Promise<FileResponse | null> {
+    protected processSignUp(response: Response): Promise<AuthenticationResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthenticationResponse;
+                return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+                return throwException("A server side error occurred.", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<AuthenticationResponse>(null as any);
     }
 
     signIn(request: SignInRequest | undefined): Promise<AuthenticationResponse> {
@@ -71,8 +70,7 @@ export class AuthenticationClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Access-Control-Allow-Origin": "*"
+                "Accept": "application/json"
             }
         };
 
@@ -86,23 +84,23 @@ export class AuthenticationClient {
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            let result200: any = null;
-            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthenticationResponse;
-            return result200;
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthenticationResponse;
+                return result200;
             });
-        } else if (status === 404) {
+        } else if (status === 400) {
             return response.text().then((_responseText) => {
-            return throwException("A server side error occurred.", status, _responseText, _headers);
+                return throwException("A server side error occurred.", status, _responseText, _headers);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
         return Promise.resolve<AuthenticationResponse>(null as any);
     }
 
-    getRefreshToken(request: RefreshTokenRequest | undefined): Promise<FileResponse | null> {
+    getRefreshToken(request: RefreshTokenRequest | undefined): Promise<AuthenticationResponse> {
         let url_ = this.baseUrl + "/Authentication/GetRefreshToken";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -122,26 +120,25 @@ export class AuthenticationClient {
         });
     }
 
-    protected processGetRefreshToken(response: Response): Promise<FileResponse | null> {
+    protected processGetRefreshToken(response: Response): Promise<AuthenticationResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AuthenticationResponse;
+                return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+                return throwException("A server side error occurred.", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<AuthenticationResponse>(null as any);
     }
 }
 
@@ -155,7 +152,7 @@ export class ProfileClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(request: CreateProfileRequest | undefined): Promise<FileResponse | null> {
+    create(request: CreateProfileRequest | undefined): Promise<ProfileResponse> {
         let url_ = this.baseUrl + "/Profile/Create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -175,32 +172,70 @@ export class ProfileClient {
         });
     }
 
-    protected processCreate(response: Response): Promise<FileResponse | null> {
+    protected processCreate(response: Response): Promise<ProfileResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ProfileResponse;
+                return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+                return throwException("A server side error occurred.", status, _responseText, _headers);
+            });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<FileResponse | null>(null as any);
+        return Promise.resolve<ProfileResponse>(null as any);
     }
 }
 
-export interface SignUpRequest {
-    Email: string;
-    Password: string;
+export class UtilsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    ping(): Promise<string> {
+        let url_ = this.baseUrl + "/Utils/Ping";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPing(_response);
+        });
+    }
+
+    protected processPing(response: Response): Promise<string> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as string;
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
+    }
 }
 
 export interface AuthenticationResponse {
@@ -210,6 +245,11 @@ export interface AuthenticationResponse {
     RefreshToken: string;
 }
 
+export interface SignUpRequest {
+    Email: string;
+    Password: string;
+}
+
 export interface SignInRequest {
     Email: string;
     Password: string;
@@ -217,6 +257,38 @@ export interface SignInRequest {
 
 export interface RefreshTokenRequest {
     RefreshToken: string;
+}
+
+export interface ProfileResponse {
+    DisplayName: string;
+    Description: string;
+    Gender: Gender;
+    PrimaryImageUrl: string;
+    ImageUrls: string[];
+    Age: number;
+    City: string;
+    Interests: InterestResponse[];
+    Occupation: OccupationResponse;
+    MaximumAcceptedDistance: number;
+    PreferredGender: Gender;
+    PreferredMinimumAge: number;
+    PreferredMaximumAge: number;
+}
+
+export enum Gender {
+    Female = 0,
+    Male = 1,
+    BiSexual = 2,
+}
+
+export interface InterestResponse {
+    InterestId: number;
+    Value: string;
+}
+
+export interface OccupationResponse {
+    OccupationId: number;
+    Value: string;
 }
 
 export interface CreateProfileRequest {
@@ -234,12 +306,6 @@ export interface CreateProfileRequest {
     PreferredGender: Gender;
     PreferredMinimumAge: number;
     PreferredMaximumAge: number;
-}
-
-export enum Gender {
-    Female = 0,
-    Male = 1,
-    BiSexual = 2,
 }
 
 export interface BaseEntity {
@@ -263,13 +329,6 @@ export enum Status {
 export interface Occupation extends BaseEntity {
     OccupationId: number;
     Value: string;
-}
-
-export interface FileResponse {
-    data: Blob;
-    status: number;
-    fileName?: string;
-    headers?: { [name: string]: any };
 }
 
 export class ApiException extends Error {
