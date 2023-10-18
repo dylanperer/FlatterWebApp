@@ -25,6 +25,7 @@
   "dependencies": {
     "@solidjs/router": "^0.8.3",
     "solid-js": "^1.7.6",
-    "tailwind-merge": "^1.14.0"
+    "tailwind-merge": "^1.14.0",
+    "@minht11/solid-virtual-container": "0.1.0"
   }
 }

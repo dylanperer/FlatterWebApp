@@ -6,7 +6,7 @@ export const delay = async (milliseconds: number): Promise<void> => {
 
 export const postMessageToReactNative = (obj:any) => {
  try {
-  //@ts-ignore
+  // @ts-ignore
   window.ReactNativeWebView.postMessage(JSON.stringify(obj));
  } catch (e: any) {
   console.log("postMessageToReactNative unsuccessful", e.message);

@@ -444,6 +444,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@minht11/solid-virtual-container@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@minht11/solid-virtual-container/-/solid-virtual-container-0.1.0.tgz#d5c796475e1461bc8a2ac16e3d94386858668a78"
+  integrity sha512-VNjI3rqnjf3ltuB3GXB3hrjTpAuuJ4Dg/Xaddb62SHbfh0liSoF2CtTTpZek7fE7O9TgtsrGljIO3PV7fcNWdg==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"

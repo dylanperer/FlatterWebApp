@@ -2,7 +2,7 @@ import { IReactNativeAction, IReactNativeEvent, ReactNativeHapticEvent } from ".
 
 const postMessage = (messages: Array<IReactNativeEvent>) => {
  try {
-  //@ts-ignore
+  //@range.ts-ignore
   window.ReactNativeWebView.postMessage(JSON.stringify([...messages]));
  } catch (e: any) {
   console.log("postMessageToReactNative unsuccessful", e.message);
