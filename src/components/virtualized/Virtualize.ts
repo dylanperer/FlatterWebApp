@@ -41,6 +41,7 @@ export function createVirtualized(
             return [start, start + Math.max(Math.ceil(size_ / itemSize_), 1)];
         },
         undefined,
+        //@ts-ignore
         tuplesEqual
     );
 
@@ -62,10 +63,13 @@ export function createVirtualized(
             const { start, end } = state;
             return [start * itemSize_, (totalCount() - end) * itemSize_];
         },
+        //@ts-ignore
         undefined,
         tuplesEqual
     );
 
+
+    //@ts-ignore
     const dimension = createMemo(() => state.count * itemSize(), undefined, true);
 
     return {

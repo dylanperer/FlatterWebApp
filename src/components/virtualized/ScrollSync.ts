@@ -7,7 +7,7 @@ type ScrollEvent = UIEvent & {
 
 type ScrollHandlers = {
     (evt: ScrollEvent): void;
-    vertical: (evt: ScrollEvent) => void;
+    vertical: (evt: any) => void;
     horizontal: (evt: ScrollEvent) => void;
 };
 

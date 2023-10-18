@@ -1,7 +1,7 @@
 import { JSX, splitProps } from "solid-js";
-import { createVirtualized } from "./virtualize";
-import { createScrollSync } from "./scrollSync";
-import Range from "./range";
+import { createVirtualized } from "./Virtualize";
+import { createScrollSync } from "./ScrollSync";
+import Range from "./Range";
 
 export interface VirtualizedListProps
     extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "children"> {
@@ -31,7 +31,7 @@ export default function VirtualizedList(props: VirtualizedListProps) {
         () => props.buffer
     );
 
-    return (
+   return (
         <div
             class="overflow-y-auto"
             onScroll={onScroll.vertical}
@@ -48,6 +48,7 @@ export default function VirtualizedList(props: VirtualizedListProps) {
                     height: `${virtualized.dimension + virtualized.margins[1]}px`
                 }}
             >
+               {/*@ts-ignore*/}
                 <Range start={virtualized.start} count={virtualized.count}>
                     {(index) => <li>{props.children(index)}</li>}
                 </Range>
