@@ -624,6 +624,18 @@
   resolved "https://registry.yarnpkg.com/@solidjs/router/-/router-0.8.3.tgz#4623cda699c4f47b3520222529b72e3cb77ec415"
   integrity sha512-oJuqQo10rVTiQYhe1qXIG1NyZIZ2YOwHnlLc8Xx+g/iJhFCJo1saLOIrD/Dkh2fpIaIny5ZMkz1cYYqoTYGJbg==
 
+"@tanstack/solid-virtual@^3.0.0-beta.65":
+  version "3.0.0-beta.65"
+  resolved "https://registry.yarnpkg.com/@tanstack/solid-virtual/-/solid-virtual-3.0.0-beta.65.tgz#3d0b80ec30a2cb40372d0a9b61adfce9436a6de0"
+  integrity sha512-sNeSjQ7HKgGXrSAUygyDb1zE0TkfD5k/P2UoZVRJtaUZSplaHzsyGJWinHRfj0KNYXCEDDoFd31RaYH6xTrb0Q==
+  dependencies:
+    "@tanstack/virtual-core" "3.0.0-beta.65"
+
+"@tanstack/virtual-core@3.0.0-beta.65":
+  version "3.0.0-beta.65"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.65.tgz#fac199321db7787db9463082903dca23c0850c5c"
+  integrity sha512-ObP2pvXBdbivinr7BWDbGqYt4TK8wNzYsOWio+qBkDx5AJFuvqcdJxcCCYnv4dzVTe5ELA1MT4tkt8NB/tnEdA==
+
 "@types/babel__core@^7.1.20":
   version "7.20.2"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.2.tgz"

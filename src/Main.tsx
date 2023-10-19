@@ -2,9 +2,8 @@ import { type Component, Suspense } from "solid-js";
 
 import { Route, Routes } from "@solidjs/router";
 import { Preloader } from "./components/Preloader";
-import { AppRoutes } from "./navman";
-import { Discover, SignIn, SignUp, Gender } from "./navman";
-import ContentInjector from "./pages/ContentInjector";
+import { AppRoutes, GenderList, SignIn } from "./navman";
+import { Discover, SignUp, Gender } from "./navman";
 
 const Main: Component = () => {
    return (
@@ -15,8 +14,7 @@ const Main: Component = () => {
                   path={AppRoutes.SignIn}
                   component={() => (
                      <Suspense fallback={<Preloader />}>
-                        {/*<SignIn />*/}
-                        <ContentInjector />
+                        <SignIn />
                      </Suspense>
                   )}
                />
@@ -46,12 +44,12 @@ const Main: Component = () => {
                      )}
                   />
                </Route>
-               <Route path={AppRoutes.Utils}>
+               <Route path={AppRoutes.Drawer}>
                   <Route
-                     path={AppRoutes.ContentInjector}
+                     path={AppRoutes.GenderList}
                      component={() => (
                         <Suspense fallback={<Preloader />}>
-                           <ContentInjector />
+                           <GenderList />
                         </Suspense>
                      )}
                   />
