@@ -1,4 +1,4 @@
-import { LogoIcon, EmailIcon, LockIcon } from "../../assets/icons";
+import { EmailIcon, LockIcon } from "../../assets/icons";
 import {
    InputField,
    InteractiveLabel,
@@ -7,61 +7,63 @@ import {
    ThirdPartyAuth,
    Svg,
 } from "../../components";
-import { useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate, useRouteData } from "@solidjs/router";
 import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
 import {
    AuthenticationClient,
    AuthenticationResponse,
-   BadRequestResponse,
    SignUpRequest,
 } from "../../api/flatter-api/FlatterClient";
 import { createSignal } from "solid-js";
 import { Error } from "../../components/Error";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
-import { errors, mapFailedResponse } from "../../common/errors";
+import { errors } from "../../common/errors";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
-import {writeAuthentication} from "../../common/storageMan";
-import {useGlobalContext} from "../../contexts/GlobalContext";
+import { useGlobalContext } from "../../contexts/GlobalContext";
+import { boolean, date, number, object, string } from "yup";
+import {useFormValidator} from "../../hooks/useFormValidator";
 
 interface Form extends SignUpRequest {
-   AgreeToTerms?: boolean;
+   agreeToTerms?: boolean;
 }
 
 const SignUp = () => {
-   const {auth}=  useGlobalContext();
-
-   const [, setAuth ] =  auth;
+   const {
+      auth: [, setAuth],
+   } = useGlobalContext();
+   const location = useLocation();
 
    const navigate = useNavigate();
 
    const client = new AuthenticationClient(FlatterApiSettings);
 
-   const form: Form = {
+   const schema: Form = {
       email: "",
       password: "",
-      AgreeToTerms: false,
+      agreeToTerms: false,
    };
 
    const [error, setError] = createSignal<string | null>(null);
 
-
    const handleSignup = async (): Promise<boolean> => {
-      let response: AuthenticationResponse;
       setError(null);
-      if (!form.email) {
-         setError(errors.signIn.EmailRequired);
-      } else if (!form.password) {
-         setError(errors.signIn.PasswordRequired);
-      } else if (form.password.length < 8) {
-         setError(errors.signIn.InvalidPasswordLength);
-      } else if (!form.AgreeToTerms) {
-         setError(errors.signIn.InvalidTerms);
-      }
+
+      await useFormValidator(
+         {
+            agreeToTerms: boolean().isTrue(errors.signIn.InvalidTerms),
+            password: string()
+               .required(errors.signIn.PasswordRequired)
+               .min(8, errors.signIn.InvalidPasswordLength),
+            email: string().required(errors.signIn.EmailRequired),
+         },
+         schema,
+         (error) => setError(error)
+      );
 
       if (!error()) {
          const request: SignUpRequest = {
-            ...form,
+            ...schema,
          };
          await useFlatterClient(
             client.signUp(request),
@@ -69,7 +71,10 @@ const SignUp = () => {
                setError(error);
             },
             (response) => {
-               setAuth({accessToken: response.token, refreshToken: response.refreshToken})
+               setAuth({
+                  accessToken: response.token,
+                  refreshToken: response.refreshToken,
+               });
                navigate(
                   `${AppRoutes.CreateProfile}/${AppRoutes.CreateProfileGender}`
                );
@@ -101,19 +106,21 @@ const SignUp = () => {
                placeholder="email"
                leftIcon={EmailIcon}
                inputMode="email"
-               onChange={(e) => (form.email = e.target.value.trim())}
+               //@ts-ignore
+               value={location.state?.email}
+               onChange={(e) => (schema.email = e.target.value.trim())}
             />
             <InputField
                placeholder="password"
                leftIcon={LockIcon}
                type="password"
-               onChange={(e) => (form.password = e.target.value.trim())}
+               onChange={(e) => (schema.password = e.target.value.trim())}
             />
             <Error errorMessage={error()} />
             <Checkbox
                class="self-end"
                label="Agree to terms & conditions"
-               onChange={(isChecked) => (form.AgreeToTerms = isChecked)}
+               onChange={(isChecked) => (schema.agreeToTerms = isChecked)}
             />
          </div>
          <Button
@@ -127,7 +134,9 @@ const SignUp = () => {
             <InteractiveLabel
                text="Sign in "
                class="justify-start"
-               onClick={() => navigate(AppRoutes.SignIn)}
+               onClick={() =>
+                  navigate(AppRoutes.SignIn, { state: { email: schema.email } })
+               }
             />
          </div>
       </section>

@@ -7,24 +7,21 @@ import {
    ThirdPartyAuth,
    Svg,
 } from "../../components";
-import { createStore } from "solid-js/store";
-import { useNavigate } from "@solidjs/router";
+import { useLocation, useNavigate } from "@solidjs/router";
 import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
-import {
-   ReactNativeConsoleLog,
-} from "../../api/react-native/ReactNativeApi";
+import { ReactNativeConsoleLog } from "../../api/react-native/ReactNativeApi";
 import {
    SignInRequest,
    UtilsClient,
 } from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
-import {useGlobalContext} from "../../contexts/GlobalContext";
+import { useGlobalContext } from "../../contexts/GlobalContext";
 
 const SignIn = () => {
    const {} = useGlobalContext();
+   const location = useLocation();
    const navigate = useNavigate();
-
 
    const handleSubmit = async () => {
       // ReactNativeConsoleLog(`1, ${request}`);
@@ -32,12 +29,12 @@ const SignIn = () => {
       try {
          const utilsClient = new UtilsClient(FlatterApiSettings.prod);
          const x = await utilsClient.ping();
-          ReactNativeConsoleLog(`2, ${x}`);
-      } catch (e) {
-      }
+         ReactNativeConsoleLog(`2, ${x}`);
+      } catch (e) {}
    };
 
-   return (
+   // @ts-ignore
+    return (
       <section class="mx-auto flex h-full animate-fade-in flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
@@ -50,6 +47,8 @@ const SignIn = () => {
                placeholder="email"
                leftIcon={EmailIcon}
                inputMode="email"
+               //@ts-ignore
+               value={location.state?.email}
                // onChange={(e) => setFormData("email", e.target.value)}
             />
             <InputField
@@ -58,9 +57,11 @@ const SignIn = () => {
                type="password"
                // onChange={(e) => setFormData("password", e.target.value)}
             />
-            <Checkbox class="self-end" label="Remember me" onChange={()=> {
-
-            }} />
+            <Checkbox
+               class="self-end"
+               label="Remember me"
+               onChange={() => {}}
+            />
          </div>
          <Button
             label="Sign in"
@@ -77,7 +78,9 @@ const SignIn = () => {
             <InteractiveLabel
                text="Create account"
                class="justify-start"
-               onClick={() => navigate(AppRoutes.SignUp)}
+               onClick={() =>
+                  navigate(AppRoutes.SignUp,  { state: { email: form.email } })
+               }
             />
          </div>
       </section>
