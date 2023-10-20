@@ -5,7 +5,7 @@ export const errors = {
       PasswordRequired: "Password is required. Please try again.",
       InvalidPasswordLength: "Password must be least 8 characters. Please try again.",
       InvalidTerms:
-         "Sorry, please read and accept terms and conditions to complete sign up.",
+         "Please read and accept terms and conditions.",
    },
 };
 

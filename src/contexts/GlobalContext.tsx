@@ -1,13 +1,20 @@
 import {
-    Accessor,
-    createContext,
-    createSignal,
-    ParentComponent, useContext,
+   Accessor,
+   createContext,
+   createEffect,
+   createSignal,
+   ParentComponent,
+   Signal,
+   useContext,
 } from "solid-js";
+import { writeAuthentication } from "../common/storageMan";
 
 interface IGlobalContext {
-   accessToken: string | null;
-   refreshToken: string | null;
+   auth: Signal<{
+      accessToken: string;
+      refreshToken: string;
+   }>;
+
    isRememberSession: boolean;
 
    isDarkMode: Accessor<boolean>;
@@ -17,12 +24,19 @@ const GlobalContext = createContext<IGlobalContext>();
 
 export const GlobalContextProvider: ParentComponent = (props) => {
    const [isDarkMode, setIsDarkMode] = createSignal<boolean>(false);
+   const auth = createSignal<{
+      accessToken: string;
+      refreshToken: string;
+   }>({ accessToken: "", refreshToken: "" });
+
+   createEffect(() => {
+      writeAuthentication(auth[0]().accessToken, auth[0]()?.refreshToken);
+   });
 
    return (
       <GlobalContext.Provider
          value={{
-            accessToken: null,
-            refreshToken: null,
+            auth,
             isRememberSession: false,
             isDarkMode,
          }}

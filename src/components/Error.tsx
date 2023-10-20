@@ -1,18 +1,20 @@
-import {Component} from "solid-js";
-import {IComponent} from "../common";
-import {twMerge} from "tailwind-merge";
+import { Component } from "solid-js";
+import { IComponent } from "../common";
+import { twMerge } from "tailwind-merge";
 
 interface IError extends IComponent {
-    errorMessage: string | null;
+   errorMessage: string | null;
 }
 
 export const Error: Component<IError> = (props) => {
-    return (
-
-        <span
-            class={twMerge("self-center text-sm font-semibold text-red-300 h-0 text-center", props.errorMessage ? 'animate-fade-in':'')}
-        >
-            {props.errorMessage}
-         </span>
-    );
+   return (
+      <span
+         class={twMerge(
+            "self-center text-center text-sm  font-semibold ",
+            props.errorMessage ? "animate-fade-in text-red-300" : "text-transparent"
+         )}
+      >
+         {props.errorMessage || "__"}
+      </span>
+   );
 };

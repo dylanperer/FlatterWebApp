@@ -12,19 +12,27 @@ import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
 import {
    AuthenticationClient,
-   AuthenticationResponse, BadRequestResponse,
+   AuthenticationResponse,
+   BadRequestResponse,
    SignUpRequest,
 } from "../../api/flatter-api/FlatterClient";
 import { createSignal } from "solid-js";
 import { Error } from "../../components/Error";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { errors, mapFailedResponse } from "../../common/errors";
+import { useFlatterClient } from "../../hooks/useFlatterClient";
+import {writeAuthentication} from "../../common/storageMan";
+import {useGlobalContext} from "../../contexts/GlobalContext";
 
 interface Form extends SignUpRequest {
    AgreeToTerms?: boolean;
 }
 
 const SignUp = () => {
+   const {auth}=  useGlobalContext();
+
+   const [, setAuth ] =  auth;
+
    const navigate = useNavigate();
 
    const client = new AuthenticationClient(FlatterApiSettings);
@@ -37,8 +45,9 @@ const SignUp = () => {
 
    const [error, setError] = createSignal<string | null>(null);
 
+
    const handleSignup = async (): Promise<boolean> => {
-      let response:AuthenticationResponse;
+      let response: AuthenticationResponse;
       setError(null);
       if (!form.email) {
          setError(errors.signIn.EmailRequired);
@@ -54,29 +63,25 @@ const SignUp = () => {
          const request: SignUpRequest = {
             ...form,
          };
-
-         try {
-            response = await client.signUp(request);
-            //@ts-ignore
-            const error = response as BadRequestResponse;
-
-            if(error.message){
-               setError(error.message);
-            }else {
+         await useFlatterClient(
+            client.signUp(request),
+            (error) => {
+               setError(error);
+            },
+            (response) => {
+               setAuth({accessToken: response.token, refreshToken: response.refreshToken})
                navigate(
                   `${AppRoutes.CreateProfile}/${AppRoutes.CreateProfileGender}`
                );
             }
-         } catch {
-            setError(errors.generic)
-         }
+         );
       }
 
       return false;
    };
 
    return (
-      <section class="mx-auto flex h-full animate-fade-in flex-col gap-10 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+      <section class="mx-auto flex h-full animate-fade-in flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign up</h1>
@@ -91,18 +96,18 @@ const SignUp = () => {
                </span>
             }
          />
-         <div class="flex flex-col gap-10">
+         <div class="flex flex-col gap-8">
             <InputField
                placeholder="email"
                leftIcon={EmailIcon}
                inputMode="email"
-               onChange={(e) => (form.email = e.target.value)}
+               onChange={(e) => (form.email = e.target.value.trim())}
             />
             <InputField
                placeholder="password"
                leftIcon={LockIcon}
                type="password"
-               onChange={(e) => (form.password = e.target.value)}
+               onChange={(e) => (form.password = e.target.value.trim())}
             />
             <Error errorMessage={error()} />
             <Checkbox
@@ -115,7 +120,6 @@ const SignUp = () => {
             label="Create account"
             onClick={async () => {
                await handleSignup();
-
             }}
          />
          <div class="mx-auto flex">
