@@ -10,38 +10,95 @@ import {
 import { useLocation, useNavigate } from "@solidjs/router";
 import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
-import { ReactNativeConsoleLog } from "../../api/react-native/ReactNativeApi";
 import {
+   AuthenticationClient,
    SignInRequest,
-   UtilsClient,
+   SignUpRequest,
 } from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { useGlobalContext } from "../../contexts/GlobalContext";
+import {  string } from "yup";
+import { useFormValidator } from "../../hooks/useFormValidator";
+import { errors } from "../../common/errors";
+import { useFlatterClient } from "../../hooks/useFlatterClient";
+import { createSignal } from "solid-js";
+import {Error} from "../../components/Error";
+
+interface Form extends SignInRequest {
+   isRememberMe?: boolean;
+}
 
 const SignIn = () => {
-   const {} = useGlobalContext();
+   const {
+      auth: [, setAuth],
+   } = useGlobalContext();
    const location = useLocation();
+
    const navigate = useNavigate();
 
-   const handleSubmit = async () => {
-      // ReactNativeConsoleLog(`1, ${request}`);
+   const client = new AuthenticationClient(FlatterApiSettings);
 
-      try {
-         const utilsClient = new UtilsClient(FlatterApiSettings.prod);
-         const x = await utilsClient.ping();
-         ReactNativeConsoleLog(`2, ${x}`);
-      } catch (e) {}
+   const schema: Form = {
+      email: "",
+      password: "",
+      isRememberMe: false,
+   };
+
+   const [error, setError] = createSignal<string | null>(null);
+
+   const handleSignIn = async (): Promise<boolean> => {
+      setError(null);
+
+      await useFormValidator(
+         {
+            password: string().required(errors.signIn.PasswordRequired),
+            email: string().required(errors.signIn.EmailRequired),
+         },
+         schema,
+         (error) => setError(error)
+      );
+
+      if (!error()) {
+         const request: SignUpRequest = {
+            ...schema,
+         };
+         await useFlatterClient(
+            client.signIn(request),
+            (error) => {
+               setError(error);
+            },
+            (response) => {
+               setAuth({
+                  accessToken: response.token,
+                  refreshToken: response.refreshToken,
+               });
+               navigate(
+                  `${AppRoutes.CreateProfile}/${AppRoutes.CreateProfileGender}`
+               );
+            }
+         );
+      }
+
+      return false;
    };
 
    // @ts-ignore
-    return (
-      <section class="mx-auto flex h-full animate-fade-in flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+   return (
+      <section class="mx-auto flex h-full animate-fade-in-slow flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign in</h1>
             <h6 class="">Hello there, let's get back into it.</h6>
          </div>
-
+         <ThirdPartyAuth
+             class="mx-auto w-full px-12 md:w-[300px]"
+             topSlot="Sigin into your account with..."
+             bottomSlot={
+                <span class="self-center text-sm text-slate-400">
+                  {"Or, with email..."}
+               </span>
+             }
+         />
          <div class="flex flex-col gap-8">
             <InputField
                placeholder="email"
@@ -49,29 +106,28 @@ const SignIn = () => {
                inputMode="email"
                //@ts-ignore
                value={location.state?.email}
-               // onChange={(e) => setFormData("email", e.target.value)}
+               onChange={(e) => (schema.email = e.target.value.trim())}
+
             />
             <InputField
                placeholder="password"
                leftIcon={LockIcon}
                type="password"
-               // onChange={(e) => setFormData("password", e.target.value)}
+               onChange={(e) => (schema.password = e.target.value.trim())}
+               rightLabel={<InteractiveLabel text={'Forgot?'}/>}
             />
+            <Error errorMessage={error()} />
             <Checkbox
                class="self-end"
                label="Remember me"
-               onChange={() => {}}
+               onChange={(isChecked) => (schema.isRememberMe = isChecked)}
             />
          </div>
          <Button
             label="Sign in"
             onClick={async () => {
-               await handleSubmit();
+               await handleSignIn();
             }}
-         />
-         <ThirdPartyAuth
-            class="mx-auto w-full px-12 md:w-[300px]"
-            topSlot="Or, sign with..."
          />
          <div class="mx-auto flex">
             <span class="mr-2">{"Don't have on yet?"}</span>
@@ -79,7 +135,7 @@ const SignIn = () => {
                text="Create account"
                class="justify-start"
                onClick={() =>
-                  navigate(AppRoutes.SignUp,  { state: { email: form.email } })
+                  navigate(AppRoutes.SignUp, { state: { email: schema.email } })
                }
             />
          </div>

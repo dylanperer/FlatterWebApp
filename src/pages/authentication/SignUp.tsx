@@ -12,7 +12,6 @@ import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
 import {
    AuthenticationClient,
-   AuthenticationResponse,
    SignUpRequest,
 } from "../../api/flatter-api/FlatterClient";
 import { createSignal } from "solid-js";
@@ -33,6 +32,7 @@ const SignUp = () => {
       auth: [, setAuth],
    } = useGlobalContext();
    const location = useLocation();
+   console.log("SignUp", location);
 
    const navigate = useNavigate();
 
@@ -86,7 +86,7 @@ const SignUp = () => {
    };
 
    return (
-      <section class="mx-auto flex h-full animate-fade-in flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+      <section class="mx-auto flex h-full animate-fade-in-slow flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign up</h1>

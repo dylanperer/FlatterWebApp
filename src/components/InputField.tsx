@@ -29,6 +29,7 @@ export const InputField: Component<IInputField> = ({
     >
      <input
       class="
+        h-8
         peer
         order-1
         w-full
@@ -42,7 +43,7 @@ export const InputField: Component<IInputField> = ({
       <LeftIcon class="self-center peer-focus:fill-app-accent-500" />
      )}
     </TouchableOpacity>
-    {rightLabel && <span class="absolute right-0 top-0">{rightLabel}</span>}
+    {rightLabel && <span class="absolute right-0 top-[.4rem] bg-white z-10">{rightLabel}</span>}
    </div>
   );
 };
