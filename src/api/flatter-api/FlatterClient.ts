@@ -18,7 +18,7 @@ export class AuthenticationClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    signUp(request: SignUpRequest | undefined): Promise<AuthenticationResponse> {
+    signUp(request?: SignUpRequest | undefined): Promise<AuthenticationResponse> {
         let url_ = this.baseUrl + "/Authentication/SignUp";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -49,7 +49,9 @@ export class AuthenticationClient {
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-                return throwException("A server side error occurred.", status, _responseText, _headers);
+                let result400: any = null;
+                result400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as BadRequestResponse;
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -59,7 +61,7 @@ export class AuthenticationClient {
         return Promise.resolve<AuthenticationResponse>(null as any);
     }
 
-    signIn(request: SignInRequest | undefined): Promise<AuthenticationResponse> {
+    signIn(request?: SignInRequest | undefined): Promise<AuthenticationResponse> {
         let url_ = this.baseUrl + "/Authentication/SignIn";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -90,7 +92,9 @@ export class AuthenticationClient {
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-                return throwException("A server side error occurred.", status, _responseText, _headers);
+                let result400: any = null;
+                result400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as BadRequestResponse;
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -100,7 +104,7 @@ export class AuthenticationClient {
         return Promise.resolve<AuthenticationResponse>(null as any);
     }
 
-    getRefreshToken(request: RefreshTokenRequest | undefined): Promise<AuthenticationResponse> {
+    getRefreshToken(request?: RefreshTokenRequest | undefined): Promise<AuthenticationResponse> {
         let url_ = this.baseUrl + "/Authentication/GetRefreshToken";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -131,7 +135,9 @@ export class AuthenticationClient {
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-                return throwException("A server side error occurred.", status, _responseText, _headers);
+                let result400: any = null;
+                result400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as BadRequestResponse;
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -152,7 +158,7 @@ export class ProfileClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
-    create(request: CreateProfileRequest | undefined): Promise<ProfileResponse> {
+    create(request?: CreateProfileRequest | undefined): Promise<ProfileResponse> {
         let url_ = this.baseUrl + "/Profile/Create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -239,40 +245,66 @@ export class UtilsClient {
 }
 
 export interface AuthenticationResponse {
-    UserId: number;
-    Email: string;
-    Token: string;
-    RefreshToken: string;
+    userId: number;
+    email: string;
+    token: string;
+    refreshToken: string;
+}
+
+export interface BadRequestResponse {
+    validationAttribute: string;
+    validationResult: ValidationResult;
+    value: any;
+    targetSite: string;
+    message: string;
+    data: { [key: string]: any; };
+    innerException: Exception;
+    helpLink: string;
+    source: string;
+    hResult: number;
+    stackTrace: string;
+}
+
+export interface ValidationResult {
+    memberNames: string[];
+    errorMessage: string;
+}
+
+export interface Exception {
+    Message: string;
+    InnerException?: Exception | undefined;
+    Source?: string | undefined;
+    StackTrace?: string | undefined;
 }
 
 export interface SignUpRequest {
-    Email: string;
-    Password: string;
+    email: string;
+    password: string;
 }
 
 export interface SignInRequest {
-    Email: string;
-    Password: string;
+    email: string;
+    password: string;
 }
 
 export interface RefreshTokenRequest {
-    RefreshToken: string;
+    refreshToken: string;
 }
 
 export interface ProfileResponse {
-    DisplayName: string;
-    Description: string;
-    Gender: Gender;
-    PrimaryImageUrl: string;
-    ImageUrls: string[];
-    Age: number;
-    City: string;
-    Interests: InterestResponse[];
-    Occupation: OccupationResponse;
-    MaximumAcceptedDistance: number;
-    PreferredGender: Gender;
-    PreferredMinimumAge: number;
-    PreferredMaximumAge: number;
+    displayName: string;
+    description: string;
+    gender: Gender;
+    primaryImageUrl: string;
+    imageUrls: string[];
+    age: number;
+    city: string;
+    interests: InterestResponse[];
+    occupation: OccupationResponse;
+    maximumAcceptedDistance: number;
+    preferredGender: Gender;
+    preferredMinimumAge: number;
+    preferredMaximumAge: number;
 }
 
 export enum Gender {
@@ -282,41 +314,41 @@ export enum Gender {
 }
 
 export interface InterestResponse {
-    InterestId: number;
-    Value: string;
+    interestId: number;
+    value: string;
 }
 
 export interface OccupationResponse {
-    OccupationId: number;
-    Value: string;
+    occupationId: number;
+    value: string;
 }
 
 export interface CreateProfileRequest {
-    UserId: number;
-    DisplayName: string;
-    Description: string;
-    Gender: Gender;
-    PrimaryImageUrl: string;
-    ImageUrls: string[];
-    Age: number;
-    City: string;
-    Interests: Interest[];
-    Occupation: Occupation;
-    MaximumAcceptedDistance: number;
-    PreferredGender: Gender;
-    PreferredMinimumAge: number;
-    PreferredMaximumAge: number;
+    userId: number;
+    displayName: string;
+    description: string;
+    gender: Gender;
+    primaryImageUrl: string;
+    imageUrls: string[];
+    age: number;
+    city: string;
+    interests: Interest[];
+    occupation: Occupation;
+    maximumAcceptedDistance: number;
+    preferredGender: Gender;
+    preferredMinimumAge: number;
+    preferredMaximumAge: number;
 }
 
 export interface BaseEntity {
-    Status: Status;
-    Created: Date;
-    Updated: Date;
+    status: Status;
+    created: Date;
+    updated: Date;
 }
 
 export interface Interest extends BaseEntity {
-    InterestId: number;
-    Value: string;
+    interestId: number;
+    value: string;
 }
 
 export enum Status {
@@ -327,8 +359,8 @@ export enum Status {
 }
 
 export interface Occupation extends BaseEntity {
-    OccupationId: number;
-    Value: string;
+    occupationId: number;
+    value: string;
 }
 
 export class ApiException extends Error {

@@ -1,6 +1,6 @@
 import { createVirtualizer } from "@tanstack/solid-virtual";
 import { Component, JSX } from "solid-js";
-import { IComponent } from "../index";
+import { IComponent } from "../common";
 
 interface IVirtualList extends IComponent {
    height: number;

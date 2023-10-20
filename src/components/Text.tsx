@@ -1,5 +1,5 @@
 import { JSX, ParentComponent } from "solid-js";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import { twMerge } from "tailwind-merge";
 
 interface IText extends IComponent, JSX.HTMLAttributes<HTMLSpanElement> {}

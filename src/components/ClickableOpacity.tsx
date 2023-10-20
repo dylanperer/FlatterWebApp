@@ -1,4 +1,4 @@
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import { ParentComponent, createSignal } from "solid-js";
 import { InvokeHaptic } from "../api/react-native/ReactNativeApi";
 import { ReactNativeHapticEvent } from "../api/react-native";

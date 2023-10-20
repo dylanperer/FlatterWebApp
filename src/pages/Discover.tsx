@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "@solidjs/router";
 import { Component } from "solid-js";
-import { AppRoutes } from "../navman";
+import { AppRoutes } from "../common/navman";
 
 const Discover: Component<{}> = (props) => {
  const navigate = useNavigate();

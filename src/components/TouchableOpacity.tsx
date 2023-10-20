@@ -1,4 +1,4 @@
-import { IComponent } from ".."
+import { IComponent } from "../common"
 import { ParentComponent } from "solid-js"
 
 interface ITouchableOpacity extends IComponent {}

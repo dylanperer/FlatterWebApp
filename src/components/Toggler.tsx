@@ -2,7 +2,7 @@ import { Component, JSX, Show, createSignal } from "solid-js";
 import { ClickableOpacity } from "./ClickableOpacity";
 import { TouchableOpacity } from "./TouchableOpacity";
 import { twMerge } from "tailwind-merge";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import female from "../assets/icons/female.png";
 import femaleActive from "../assets/icons/femaleActive.png";
 import male from "../assets/icons/male.png";

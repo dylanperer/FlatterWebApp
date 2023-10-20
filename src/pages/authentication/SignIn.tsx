@@ -1,4 +1,4 @@
-import { EmailIcon, LockIcon } from "../assets/icons";
+import { EmailIcon, LockIcon } from "../../assets/icons";
 import {
    InputField,
    InteractiveLabel,
@@ -6,35 +6,28 @@ import {
    Button,
    ThirdPartyAuth,
    Svg,
-} from "../components";
+} from "../../components";
 import { createStore } from "solid-js/store";
 import { useNavigate } from "@solidjs/router";
-import { AppRoutes } from "../navman";
-import Logo from "../assets/svg/logo2.svg";
+import { AppRoutes } from "../../common/navman";
+import Logo from "../../assets/svg/logo2.svg";
 import {
-   OpenBottomDrawer,
    ReactNativeConsoleLog,
-} from "../api/react-native/ReactNativeApi";
+} from "../../api/react-native/ReactNativeApi";
 import {
-   AuthenticationClient,
    SignInRequest,
    UtilsClient,
-} from "../api/flatter-api/FlatterClient";
-import { FlatterApiSettings } from "../api/flatter-api/FlatterApiSettings";
+} from "../../api/flatter-api/FlatterClient";
+import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
+import {useGlobalContext} from "../../contexts/GlobalContext";
 
 const SignIn = () => {
+   const {} = useGlobalContext();
    const navigate = useNavigate();
-   const [formData, setFormData] = createStore({
-      email: "",
-      password: "",
-   });
+
 
    const handleSubmit = async () => {
-      const request: SignInRequest = {
-         Email: formData.email,
-         Password: formData.password,
-      };
-      ReactNativeConsoleLog(`1, ${request}`);
+      // ReactNativeConsoleLog(`1, ${request}`);
 
       try {
          const utilsClient = new UtilsClient(FlatterApiSettings.prod);
@@ -57,13 +50,13 @@ const SignIn = () => {
                placeholder="email"
                leftIcon={EmailIcon}
                inputMode="email"
-               onChange={(e) => setFormData("email", e.target.value)}
+               // onChange={(e) => setFormData("email", e.target.value)}
             />
             <InputField
                placeholder="password"
                leftIcon={LockIcon}
                type="password"
-               onChange={(e) => setFormData("password", e.target.value)}
+               // onChange={(e) => setFormData("password", e.target.value)}
             />
             <Checkbox class="self-end" label="Remember me" />
          </div>

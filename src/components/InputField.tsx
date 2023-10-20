@@ -1,5 +1,5 @@
 import { Component, JSX } from "solid-js";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import { TouchableOpacity } from "./TouchableOpacity";
 
 interface IInputField

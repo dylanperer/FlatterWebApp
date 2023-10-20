@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import { ClickableOpacity } from "./ClickableOpacity";
 import { twMerge } from "tailwind-merge";
 

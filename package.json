@@ -1,5 +1,6 @@
 {
   "name": "vite-template-solid",
+  "type": "module",
   "version": "0.0.0",
   "proxy": "http://localhost:3000/",
   "description": "",
@@ -16,7 +17,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
-    "solid-devtools": "^0.27.3",
+    "solid-devtools": "^0.27.7",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.3",
     "vite": "^4.3.9",
@@ -26,6 +27,7 @@
     "@minht11/solid-virtual-container": "0.1.0",
     "@solidjs/router": "^0.8.3",
     "@tanstack/solid-virtual": "^3.0.0-beta.65",
+    "axios": "^1.5.1",
     "solid-js": "^1.7.6",
     "tailwind-merge": "^1.14.0"
   }

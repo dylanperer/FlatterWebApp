@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
-import { IComponent } from "..";
 import { ClickableOpacity } from "./ClickableOpacity";
 import { twMerge } from "tailwind-merge";
 import appleSvg from "../assets/svg/apple.min.svg";
 import facebookSvg from "../assets/svg/facebook.min.svg";
 import googleSvg from "../assets/svg/google.min.svg";
 import { Svg } from ".";
+import { IComponent } from "../common";
 
 interface IThirdPartyAuth extends IComponent {
  topSlot?: any;

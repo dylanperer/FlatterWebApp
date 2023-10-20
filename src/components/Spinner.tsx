@@ -1,5 +1,5 @@
 import { Component } from "solid-js";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 
 export interface ISpinner extends IComponent {}
 

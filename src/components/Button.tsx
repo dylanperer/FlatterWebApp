@@ -1,5 +1,5 @@
 import { Component, createSignal } from "solid-js";
-import { IComponent } from "..";
+import { IComponent } from "../common";
 import { Spinner } from "./Spinner";
 import { ClickableOpacity } from "./ClickableOpacity";
 import { twMerge } from "tailwind-merge";
