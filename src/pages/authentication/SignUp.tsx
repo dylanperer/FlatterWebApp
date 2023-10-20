@@ -12,6 +12,7 @@ import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
 import {
    AuthenticationClient,
+   AuthenticationResponse,
    SignUpRequest,
 } from "../../api/flatter-api/FlatterClient";
 import { createSignal } from "solid-js";
@@ -66,19 +67,22 @@ const SignUp = () => {
          const request: SignUpRequest = {
             ...schema,
          };
-         await useFlatterClient(
+
+         await useFlatterClient<AuthenticationResponse>(
             client.signUp(request),
-            (error) => {
-               setError(error);
-            },
-            (response) => {
-               setAuth({
-                  accessToken: response.token,
-                  refreshToken: response.refreshToken,
-               });
-               navigate(
-                  `${AppRoutes.CreateProfile}/${AppRoutes.CreateProfileGender}`
-               );
+            {
+               onError: (error) => {
+                  setError(error);
+               },
+               onSuccess: (response) => {
+                  setAuth({
+                     accessToken: response.token,
+                     refreshToken: response.refreshToken,
+                  });
+                  navigate(
+                     `${AppRoutes.CreateProfile}/${AppRoutes.CreateProfileGender}`
+                  );
+               },
             }
          );
       }

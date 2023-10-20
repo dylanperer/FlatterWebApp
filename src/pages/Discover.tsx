@@ -5,7 +5,7 @@ import { AppRoutes } from "../common/navman";
 const Discover: Component<{}> = (props) => {
  const navigate = useNavigate();
 
- navigate(AppRoutes.SignUp);
+ // navigate(AppRoutes.SignUp);
  
  return <div>Discover</div>;
 };

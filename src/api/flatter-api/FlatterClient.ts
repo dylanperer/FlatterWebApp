@@ -158,6 +158,48 @@ export class ProfileClient {
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
+    getById(userId: number): Promise<ProfileResponse> {
+        let url_ = this.baseUrl + "/Profile/GetById";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetById(_response);
+        });
+    }
+
+    protected processGetById(response: Response): Promise<ProfileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ProfileResponse;
+                return result200;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                let result404: any = null;
+                result404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ErrorResponse;
+                return throwException("A server side error occurred.", status, _responseText, _headers, result404);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ProfileResponse>(null as any);
+    }
+
     create(request?: CreateProfileRequest | undefined): Promise<ProfileResponse> {
         let url_ = this.baseUrl + "/Profile/Create";
         url_ = url_.replace(/[?&]$/, "");
@@ -189,7 +231,9 @@ export class ProfileClient {
             });
         } else if (status === 400) {
             return response.text().then((_responseText) => {
-                return throwException("A server side error occurred.", status, _responseText, _headers);
+                let result400: any = null;
+                result400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as BadRequestResponse;
+                return throwException("A server side error occurred.", status, _responseText, _headers, result400);
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
@@ -321,6 +365,13 @@ export interface InterestResponse {
 export interface OccupationResponse {
     occupationId: number;
     value: string;
+}
+
+export interface ErrorResponse {
+    type: string;
+    title: string;
+    status: number;
+    traceId: string;
 }
 
 export interface CreateProfileRequest {
