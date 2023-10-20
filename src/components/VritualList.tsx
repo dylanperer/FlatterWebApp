@@ -23,9 +23,10 @@ export const VirtualList: Component<IVirtualList> = ({
    return (
       <div
          ref={(c) => (containerRef = c)}
-         class={`h-[${height}px]`}
+         class={``}
          style={{
             overflow: "auto",
+             height: `${height}px`
          }}
       >
          <div

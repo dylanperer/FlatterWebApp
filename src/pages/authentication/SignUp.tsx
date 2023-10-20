@@ -7,7 +7,7 @@ import {
    ThirdPartyAuth,
    Svg,
 } from "../../components";
-import { useLocation, useNavigate, useRouteData } from "@solidjs/router";
+import { useLocation, useNavigate } from "@solidjs/router";
 import { AppRoutes } from "../../common/navman";
 import Logo from "../../assets/svg/logo2.svg";
 import {
@@ -20,8 +20,8 @@ import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { errors } from "../../common/errors";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
 import { useGlobalContext } from "../../contexts/GlobalContext";
-import { boolean, date, number, object, string } from "yup";
-import {useFormValidator} from "../../hooks/useFormValidator";
+import { boolean, string } from "yup";
+import { useFormValidator } from "../../hooks/useFormValidator";
 
 interface Form extends SignUpRequest {
    agreeToTerms?: boolean;
@@ -31,15 +31,16 @@ const SignUp = () => {
    const {
       auth: [, setAuth],
    } = useGlobalContext();
-   const location = useLocation();
-   console.log("SignUp", location);
 
    const navigate = useNavigate();
+
+   const location = useLocation();
 
    const client = new AuthenticationClient(FlatterApiSettings);
 
    const schema: Form = {
-      email: "",
+      //@ts-ignore
+      email: location.state?.email || "",
       password: "",
       agreeToTerms: false,
    };
@@ -86,7 +87,7 @@ const SignUp = () => {
    };
 
    return (
-      <section class="mx-auto flex h-full animate-fade-in-slow flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+      <section class="animate-fade-in-slow mx-auto flex h-full flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign up</h1>

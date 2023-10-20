@@ -17,12 +17,12 @@ import {
 } from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { useGlobalContext } from "../../contexts/GlobalContext";
-import {  string } from "yup";
+import { string } from "yup";
 import { useFormValidator } from "../../hooks/useFormValidator";
 import { errors } from "../../common/errors";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
 import { createSignal } from "solid-js";
-import {Error} from "../../components/Error";
+import { Error } from "../../components/Error";
 
 interface Form extends SignInRequest {
    isRememberMe?: boolean;
@@ -39,7 +39,8 @@ const SignIn = () => {
    const client = new AuthenticationClient(FlatterApiSettings);
 
    const schema: Form = {
-      email: "",
+      //@ts-ignore
+      email: location.state?.email || "",
       password: "",
       isRememberMe: false,
    };
@@ -84,20 +85,20 @@ const SignIn = () => {
 
    // @ts-ignore
    return (
-      <section class="mx-auto flex h-full animate-fade-in-slow flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+      <section class="animate-fade-in-slow mx-auto flex h-full flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign in</h1>
             <h6 class="">Hello there, let's get back into it.</h6>
          </div>
          <ThirdPartyAuth
-             class="mx-auto w-full px-12 md:w-[300px]"
-             topSlot="Sigin into your account with..."
-             bottomSlot={
-                <span class="self-center text-sm text-slate-400">
+            class="mx-auto w-full px-12 md:w-[300px]"
+            topSlot="Sigin into your account with..."
+            bottomSlot={
+               <span class="self-center text-sm text-slate-400">
                   {"Or, with email..."}
                </span>
-             }
+            }
          />
          <div class="flex flex-col gap-8">
             <InputField
@@ -107,14 +108,13 @@ const SignIn = () => {
                //@ts-ignore
                value={location.state?.email}
                onChange={(e) => (schema.email = e.target.value.trim())}
-
             />
             <InputField
                placeholder="password"
                leftIcon={LockIcon}
                type="password"
                onChange={(e) => (schema.password = e.target.value.trim())}
-               rightLabel={<InteractiveLabel text={'Forgot?'}/>}
+               rightLabel={<InteractiveLabel text={"Forgot?"} />}
             />
             <Error errorMessage={error()} />
             <Checkbox
