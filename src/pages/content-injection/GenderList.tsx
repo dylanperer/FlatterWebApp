@@ -1,12 +1,12 @@
 import { useSearchParams } from "@solidjs/router";
 import {VirtualList} from "../../components/VritualList";
-import {ClickableOpacity} from "../../components";
+import {TouchableOpacity} from "../../components";
 const GenderList = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const items = Array.from({length: 100000}).map((c,i)=><ClickableOpacity class="w-full bg-green-400">{i}</ClickableOpacity>)
+    const items = Array.from({length: 10000}).map((c,i)=><TouchableOpacity class="w-full h-full border-2">{i}</TouchableOpacity>)
 
-    return <VirtualList items={items} height={800} itemHeight={40}/>;
+    return <VirtualList items={items} height={800} itemHeight={60}/>;
 };
 
 export default GenderList;

@@ -25,7 +25,7 @@ export const VirtualList: Component<IVirtualList> = ({
          ref={(c) => (containerRef = c)}
          class={``}
          style={{
-            overflow: "auto",
+            overflow: "scroll",
              height: `${height}px`
          }}
       >

@@ -34,7 +34,7 @@ const Main: Component = () => {
                      path={AppRoutes.Discover}
                      component={() => (
                         <Suspense fallback={<Preloader />}>
-                           <Discover />
+                           <Gender />
                         </Suspense>
                      )}
                   />

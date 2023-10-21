@@ -88,7 +88,7 @@ const SignIn = () => {
 
    // @ts-ignore
    return (
-      <section class="animate-fade-in-slow mx-auto flex h-full flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+      <section class="animate-fade-in-slow mx-auto flex h-full flex-col gap-8 overflow-y-scroll px-4 no-scrollbar md:w-[400px] mb-5">
          <Svg src={Logo} width={22} class="mx-auto flex-shrink-0" />
          <div class="flex  flex-col">
             <h1 class="text-3xl font-semibold text-slate-600">Sign in</h1>
