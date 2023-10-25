@@ -17,6 +17,7 @@ export const useFlatterClient = async <T,>(
    try {
       const response = await request;
       onStates.onSuccess && onStates.onSuccess(response);
+      return response;
    } catch (e: any) {
       const error = e as ErrorResponse;
       const badRequest = e as BadRequestResponse;

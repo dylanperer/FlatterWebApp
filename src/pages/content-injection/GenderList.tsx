@@ -1,12 +1,54 @@
-import { useSearchParams } from "@solidjs/router";
-import {VirtualList} from "../../components/VritualList";
-import {TouchableOpacity} from "../../components";
+import {
+   IRadioButtonItem,
+   RadioButtonGroup,
+} from "../../components/RadioButtonGroup";
+import { createEffect, createResource, createSignal, Show } from "solid-js";
+import { ProfileClient } from "../../api/flatter-api/FlatterClient";
+import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
+import { useFlatterClient } from "../../hooks/useFlatterClient";
+import { useGlobalContext } from "../../contexts/GlobalContext";
+import {twMerge} from "tailwind-merge";
+
+const fetchGenderIdentities = async () => {
+   try {
+      const client = new ProfileClient(FlatterApiSettings);
+      const genderIdentities = await client.getGenderIdentities();
+
+      return genderIdentities.map((c) => {
+         const item: IRadioButtonItem = {
+            id: c.genderIdentityId,
+            value: "genderIdentity",
+            element: c.value,
+         };
+         return item;
+      });
+   } catch (e) {
+      console.error(e);
+   }
+};
+
 const GenderList = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
+   const [genderIdentities] = createResource(fetchGenderIdentities);
 
-    const items = Array.from({length: 10000}).map((c,i)=><TouchableOpacity class="w-full h-full border-2">{i}</TouchableOpacity>)
+   let containerHeight: HTMLDivElement;
 
-    return <VirtualList items={items} height={800} itemHeight={60}/>;
+   const {
+      bottomDrawerSnapIndex: [currentIndex],
+   } = useGlobalContext();
+
+
+   return (
+      <div ref={(c)=>containerHeight} style={{height: `${currentIndex()}px`}}>
+         <Show when={genderIdentities()}>
+            <RadioButtonGroup
+               name={"Gender"}
+               items={genderIdentities()}
+               onChange={(e) => console.log(e)}
+               class="px-4"
+            />
+         </Show>
+      </div>
+   );
 };
 
 export default GenderList;
