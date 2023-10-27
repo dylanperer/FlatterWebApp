@@ -9,7 +9,7 @@ const postMessage = (messages: Array<IReactNativeEvent>) => {
  }
 };
 
-export const OpenBottomDrawer = (route: string) => {
+export const ReactNativeDrawer = (route: string) => {
  const messages: Array<IReactNativeEvent> = [
   { action: IReactNativeAction.OpenBottomDrawer, message: route },
   {
@@ -20,7 +20,7 @@ export const OpenBottomDrawer = (route: string) => {
  postMessage(messages);
 };
 
-export const InvokeHaptic = (haptic: ReactNativeHapticEvent) => {
+export const ReactNativeHaptic = (haptic: ReactNativeHapticEvent) => {
  postMessage([{ action: IReactNativeAction.InvokeHaptic, message: haptic }]);
 };
 

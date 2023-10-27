@@ -1,6 +1,6 @@
 import { TouchableOpacity } from "./TouchableOpacity";
 import { Component } from "solid-js";
-import { InvokeHaptic } from "../api/react-native/ReactNativeApi";
+import { ReactNativeHaptic } from "../api/react-native/ReactNativeClient";
 import { ReactNativeHapticEvent } from "../api/react-native";
 import { IComponent } from "../common";
 
@@ -11,7 +11,7 @@ interface ICheckbox extends IComponent {
 
 export const Checkbox: Component<ICheckbox> = (props) => {
    const handleCheckboxChange = (event: any) => {
-      InvokeHaptic(ReactNativeHapticEvent.Light);
+      ReactNativeHaptic(ReactNativeHapticEvent.Light);
       props.onChange(event.target.checked);
       console.log(event.target.checked);
    };

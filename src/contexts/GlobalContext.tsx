@@ -8,7 +8,6 @@ import {
    useContext,
 } from "solid-js";
 import { writeAuthentication } from "../common/storageMan";
-import {number} from "yup";
 
 interface IGlobalContext {
    auth: Signal<{
@@ -37,17 +36,10 @@ export const GlobalContextProvider: ParentComponent = (props) => {
 
       switch (receivedMessage){
          case 0:{
-            bottomDrawerSnapIndex[1](window.innerHeight * 0.46);
+            bottomDrawerSnapIndex[1](window.innerHeight);
             break;
          }
-         case 1:{
-            bottomDrawerSnapIndex[1](window.innerHeight * 0.68);
-            break;
-         }
-         case 2:{
-            bottomDrawerSnapIndex[1](window.innerHeight * 0.8);
-            break;
-         }
+
       }
       //
       // if (receivedMessage === 0) {

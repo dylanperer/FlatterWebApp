@@ -18,12 +18,21 @@ module.exports = {
              '100%': {
             opacity: 1,
           }
+        },
+        'drawer-fade-in': {
+          '0%': {
+            opacity: 0,
+          },
+          '100%': {
+            opacity: .55,
+          }
         }
       },
       animation: {
         'fade-in-slow': 'fade-in .8s ease-in',
         'fade-in': 'fade-in .6s ease-in',
         'fade-in-s': 'fade-in .5s ease-in',
+        'drawer-fade-in': 'drawer-fade-in .2s ease-in',
       }
     },
   },

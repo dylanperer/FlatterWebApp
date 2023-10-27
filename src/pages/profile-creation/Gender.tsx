@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { useAnimationDelay } from "../../hooks/useAnimationDelay";
 import { Button, InteractiveLabel, Text, Toggler } from "../../components";
 import {} from "../../assets/icons/";
-import { OpenBottomDrawer } from "../../api/react-native/ReactNativeApi";
+import { ReactNativeDrawer } from "../../api/react-native/ReactNativeClient";
 import {ProfileClient, ProfileResponse} from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
@@ -53,7 +53,7 @@ const Gender: Component<{}> = () => {
             <InteractiveLabel
                class="text-sm font-medium text-slate-400"
                text="more choices?"
-               onClick={() => OpenBottomDrawer("")}
+               onClick={() => ReactNativeDrawer("")}
             />
          </div>
          <div

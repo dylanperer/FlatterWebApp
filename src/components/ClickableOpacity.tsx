@@ -1,6 +1,6 @@
 import { IComponent } from "../common";
 import { ParentComponent, createSignal } from "solid-js";
-import { InvokeHaptic } from "../api/react-native/ReactNativeApi";
+import { ReactNativeHaptic } from "../api/react-native/ReactNativeClient";
 import { ReactNativeHapticEvent } from "../api/react-native";
 
 interface IClickableOpacity extends IComponent {
@@ -30,7 +30,7 @@ export const ClickableOpacity: ParentComponent<IClickableOpacity> = ({
       ${isTouching() ? "opacity-50" : "opacity-100"}
       ${props.class}`}
          onClick={() => {
-            InvokeHaptic(ReactNativeHapticEvent.Light);
+            ReactNativeHaptic(ReactNativeHapticEvent.Light);
             onClick();
          }}
          ontouchstart={() => handleTouch(true)}

@@ -2,12 +2,12 @@ import {
    IRadioButtonItem,
    RadioButtonGroup,
 } from "../../components/RadioButtonGroup";
-import { createEffect, createResource, createSignal, Show } from "solid-js";
+import { createResource, Show } from "solid-js";
 import { ProfileClient } from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
-import { useFlatterClient } from "../../hooks/useFlatterClient";
 import { useGlobalContext } from "../../contexts/GlobalContext";
-import {twMerge} from "tailwind-merge";
+import {ReactNativeHaptic} from "../../api/react-native/ReactNativeClient";
+import { ReactNativeHapticEvent } from "../../api/react-native";
 
 const fetchGenderIdentities = async () => {
    try {
@@ -36,18 +36,17 @@ const GenderList = () => {
       bottomDrawerSnapIndex: [currentIndex],
    } = useGlobalContext();
 
-
    return (
-      <div ref={(c)=>containerHeight} style={{height: `${currentIndex()}px`}}>
-         <Show when={genderIdentities()}>
-            <RadioButtonGroup
-               name={"Gender"}
-               items={genderIdentities()}
-               onChange={(e) => console.log(e)}
-               class="px-4"
-            />
-         </Show>
-      </div>
+      <Show when={genderIdentities()}>
+         <RadioButtonGroup
+            name={"Gender"}
+            items={genderIdentities()}
+            onChange={(e) => {
+               ReactNativeHaptic(ReactNativeHapticEvent.Light);
+            }}
+            class="px-4"
+         />
+      </Show>
    );
 };
 
