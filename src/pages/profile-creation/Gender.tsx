@@ -3,15 +3,25 @@ import { twMerge } from "tailwind-merge";
 import { useAnimationDelay } from "../../hooks/useAnimationDelay";
 import { Button, InteractiveLabel, Text, Toggler } from "../../components";
 import {} from "../../assets/icons/";
-import { ReactNativeDrawer } from "../../api/react-native/ReactNativeClient";
+import {ReactNativeConsoleLog, ReactNativeDrawer} from "../../api/react-native/ReactNativeClient";
 import {ProfileClient, ProfileResponse} from "../../api/flatter-api/FlatterClient";
 import { FlatterApiSettings } from "../../api/flatter-api/FlatterApiSettings";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
 import { useNavigate } from "@solidjs/router";
+import { useDrawerCallBack } from "../../hooks/useDrawerCallBack";
+import { IRadioButtonItem } from "../../components/RadioButtonGroup";
 
 const Gender: Component<{}> = () => {
+   const  navigator = useNavigate();
+
+   const [test, sTest]= createSignal('');
+
+   useDrawerCallBack<IRadioButtonItem>((data)=> {
+      // ReactNativeConsoleLog(`from signin ${data.id}`);
+      sTest(data.element as string)
+   }, true);
+
    createEffect(async () => {
-      const navigator = useNavigate();
       const profileClient = new ProfileClient(FlatterApiSettings);
 
       await useFlatterClient<ProfileResponse>(profileClient.getById(1), {
@@ -26,8 +36,10 @@ const Gender: Component<{}> = () => {
       { class: "opacity-100 animate-fade-in-s", delay: 2800 },
    ]);
 
+
    return (
       <section class="mx-auto flex h-full flex-col gap-10 overflow-y-scroll px-4 no-scrollbar md:w-[400px]">
+         <p class="bg-red-600 text-pink-100 mt-12">{test()||"aaaaaaaaaaaaa"}</p>
          <div class="mt-12 flex w-[16rem] flex-col self-center">
             <Text
                class={twMerge(
@@ -53,7 +65,7 @@ const Gender: Component<{}> = () => {
             <InteractiveLabel
                class="text-sm font-medium text-slate-400"
                text="more choices?"
-               onClick={() => ReactNativeDrawer("")}
+               onClick={()=>ReactNativeDrawer('')}
             />
          </div>
          <div
@@ -62,7 +74,7 @@ const Gender: Component<{}> = () => {
                d4()
             )}
          >
-            <Button label="Continue" />
+            <Button label="Continue" onClick={async ()=>navigator('/sign-in')}/>
          </div>
       </section>
    );

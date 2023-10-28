@@ -1,5 +1,6 @@
 export enum IReactNativeAction {
  OpenBottomDrawer = "OpenBottomDrawer",
+ DrawerItemSelected = 'DrawerItemSelected',
  InvokeHaptic = "InvokeHaptic",
  Log = "Log",
 }

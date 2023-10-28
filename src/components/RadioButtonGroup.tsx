@@ -1,10 +1,9 @@
 import { Component, createSignal, For, JSX } from "solid-js";
 import { IComponent } from "../common";
 import { ClickableOpacity } from "./ClickableOpacity";
-import { TouchableOpacity } from "./TouchableOpacity";
 import { twMerge } from "tailwind-merge";
 import { useGlobalContext } from "../contexts/GlobalContext";
-import {ReactNativeConsoleLog} from "../api/react-native/ReactNativeClient";
+import {ReactNativeConsoleLog, ReactNativeDrawerItemSelected} from "../api/react-native/ReactNativeClient";
 
 export interface IRadioButtonItem {
    id: number;
@@ -22,24 +21,19 @@ export const RadioButtonGroup: Component<IRadioButton> = ({
    items = [],
    ...props
 }) => {
-   const {
-      bottomDrawerSnapIndex: [currentIndex],
-   } = useGlobalContext();
-
    const [active, setActive] = createSignal<number>(0);
 
    const handActive = (index: number) => {
       setActive(index);
       props.onChange(items[index]);
+      ReactNativeDrawerItemSelected(items[index]);
    };
 
    ReactNativeConsoleLog('@> test');
    return (
       <>
-         <p>{currentIndex()}</p>
          <div
-            class={twMerge(props.class, "overflow-y-scroll")}
-            style={{ height: `${currentIndex()}px` }}
+            class={twMerge(props.class, "overflow-y-scroll py-5")}
          >
             <For each={items} fallback={<div>No items</div>}>
                {(c, i) => (

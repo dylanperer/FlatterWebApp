@@ -32,10 +32,6 @@ const GenderList = () => {
 
    let containerHeight: HTMLDivElement;
 
-   const {
-      bottomDrawerSnapIndex: [currentIndex],
-   } = useGlobalContext();
-
    return (
       <Show when={genderIdentities()}>
          <RadioButtonGroup

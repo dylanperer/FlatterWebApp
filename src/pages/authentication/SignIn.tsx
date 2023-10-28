@@ -24,7 +24,6 @@ import { errors } from "../../common/errors";
 import { useFlatterClient } from "../../hooks/useFlatterClient";
 import { createSignal } from "solid-js";
 import { Error } from "../../components/Error";
-import {useDrawer} from "../../contexts/DrawerContext";
 
 interface Form extends SignInRequest {
    isRememberMe?: boolean;
@@ -34,6 +33,7 @@ const SignIn = () => {
    const {
       auth: [, setAuth],
    } = useGlobalContext();
+
    const location = useLocation();
 
    const navigate = useNavigate();
@@ -130,7 +130,7 @@ const SignIn = () => {
          <Button
             label="Sign in"
             onClick={async () => {
-               await handleSignIn();
+               // await handleSignIn();
             }}
          />
          <div class="mx-auto flex">

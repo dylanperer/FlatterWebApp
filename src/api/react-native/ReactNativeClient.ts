@@ -11,14 +11,19 @@ const postMessage = (messages: Array<IReactNativeEvent>) => {
 
 export const ReactNativeDrawer = (route: string) => {
  const messages: Array<IReactNativeEvent> = [
-  { action: IReactNativeAction.OpenBottomDrawer, message: route },
-  {
-   action: IReactNativeAction.InvokeHaptic,
-   message: ReactNativeHapticEvent.Light,
-  },
+    { action: IReactNativeAction.OpenBottomDrawer, message: { route} },
+    {
+       action: IReactNativeAction.InvokeHaptic,
+       message: ReactNativeHapticEvent.Light,
+    },
  ];
  postMessage(messages);
 };
+
+export const ReactNativeDrawerItemSelected = (item: object) => {
+    postMessage([{ action: IReactNativeAction.DrawerItemSelected, message: JSON.stringify(item) }]);
+};
+
 
 export const ReactNativeHaptic = (haptic: ReactNativeHapticEvent) => {
  postMessage([{ action: IReactNativeAction.InvokeHaptic, message: haptic }]);
@@ -27,5 +32,6 @@ export const ReactNativeHaptic = (haptic: ReactNativeHapticEvent) => {
 export const ReactNativeConsoleLog = (msg: string) => {
  postMessage([{ action: IReactNativeAction.Log, message: msg }]);
 };
+
 
 
